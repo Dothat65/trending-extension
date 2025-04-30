@@ -6,6 +6,7 @@ import isodate
 import os
 from dotenv import load_dotenv
 from google import genai
+from urllib.parse import quote
 
 app = Flask(__name__)
 CORS(app)
@@ -93,7 +94,8 @@ def getShorts(location):
     
 
 def getVideoIDs(location):
-    url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={location}&type=video&videoDuration=short&maxResults=50&key={GOOGLE_API_KEY}"
+    encoded_location = quote(location)
+    url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={encoded_location}&type=video&videoDuration=short&maxResults=50&key={GOOGLE_API_KEY}"
 
     response = requests.get(url)
 
