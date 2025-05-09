@@ -4,7 +4,7 @@
     "description": "Find pros and cons and youtube shorts for restaurants",
     "version": "1.0",
     "action": {
-        "default_popup" : "popup/popup.html"
+        "default_popup" : "popup.html"
     },
     "icons": {
     },
