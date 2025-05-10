@@ -4,22 +4,29 @@ import LocationInput from './LocationInput.jsx';
 import styles from './App.module.css';
 
 function App() {
+  // State to hold restaurant data
   const [restaurantData, setRestaurantData] = useState(null);
+  // State to track loading status
   const [isLoading, setIsLoading] = useState(false);
+  // State to track errors
   const [error, setError] = useState(null);
+  // State to track the current location input
   const [currentLocation, setCurrentLocation] = useState("");
 
+  // Effect to load mock data on initial render
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
       setRestaurantData(mockRestaurantData);
       setCurrentLocation(mockRestaurantData.restaurantName || "Featured Restaurant");
       setIsLoading(false);
-    }, 500);
+    }, 500); // Simulate a delay for loading
   }, []);
 
+  // Function to handle location input submission
   const handleLocationSubmit = (locationQuery) => {
     if (!locationQuery.trim()) {
+      // Handle empty input
       setError("Please enter a location.");
       setRestaurantData(null);
       setCurrentLocation("");
@@ -32,11 +39,14 @@ function App() {
     setRestaurantData(null);
     setCurrentLocation(locationQuery);
 
+    // Simulate fetching data with a delay
     setTimeout(() => {
       if (locationQuery.toLowerCase().includes("error")) {
+        // Simulate an error scenario
         setError("Mock Error: Could not find info for " + locationQuery);
         setRestaurantData(null);
       } else if (locationQuery.toLowerCase().includes("empty")) {
+        // Simulate an empty data scenario
         setRestaurantData({
           restaurantName: locationQuery,
           pros: [],
@@ -44,15 +54,17 @@ function App() {
           shorts: []
         });
       } else {
+        // Simulate successful data fetch
         setRestaurantData({
           ...mockRestaurantData,
           restaurantName: locationQuery
         });
       }
       setIsLoading(false);
-    }, 1000);
+    }, 1000); // Simulate a delay for fetching
   };
 
+  // Render loading state
   if (isLoading) {
     return (
       <div className={styles.appContainer}>
@@ -62,6 +74,7 @@ function App() {
     );
   }
 
+  // Render error state
   if (error) {
     return (
       <div className={styles.appContainer}>
@@ -71,6 +84,7 @@ function App() {
     );
   }
 
+  // Render initial state when no data is available
   if (!restaurantData) {
     return (
       <div className={styles.appContainer}>
@@ -80,6 +94,7 @@ function App() {
     );
   }
 
+  // Render restaurant data
   return (
     <div className={styles.appContainer}>
       <LocationInput onSubmit={handleLocationSubmit} disabled={isLoading} />
