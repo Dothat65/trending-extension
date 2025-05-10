@@ -121,15 +121,15 @@ function App() {
             )}
           </div>
 
-          {/* Shorts Section - Simplified Links */}
+          {/* Shorts Section */}
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Shorts</h2>
             {restaurantData.shorts && restaurantData.shorts.length > 0 ? (
-              <ul className={styles.list}> {/* Changed shortsGrid to list for simple links */}
+              <ul className={styles.list}> 
                 {restaurantData.shorts.map((shortUrl, index) => {
                  
                   return (
-                    <li key={`short-${index}`} className={styles.listItem}> {/* Using listItem style */}
+                    <li key={`short-${index}`} className={styles.listItem}>
                       <a
                         href={shortUrl}
                         target="_blank"
