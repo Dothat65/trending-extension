@@ -25,6 +25,7 @@ function App() {
       setCurrentLocation("");
       return;
     }
+
     console.log("Fetching data for:", locationQuery);
     setIsLoading(true);
     setError(null);
@@ -95,7 +96,10 @@ function App() {
             {restaurantData.pros && restaurantData.pros.length > 0 ? (
               <ul className={styles.list}>
                 {restaurantData.pros.map((pro, index) => (
-                  <li key={`pro-${index}`} className={`${styles.listItem} ${styles.proItem}`}>
+                  <li
+                    key={`pro-${index}`}
+                    className={`${styles.listItem} ${styles.proItem}`}
+                  >
                     {pro}
                   </li>
                 ))}
@@ -111,7 +115,10 @@ function App() {
             {restaurantData.cons && restaurantData.cons.length > 0 ? (
               <ul className={styles.list}>
                 {restaurantData.cons.map((con, index) => (
-                  <li key={`con-${index}`} className={`${styles.listItem} ${styles.conItem}`}>
+                  <li
+                    key={`con-${index}`}
+                    className={`${styles.listItem} ${styles.conItem}`}
+                  >
                     {con}
                   </li>
                 ))}
@@ -125,22 +132,19 @@ function App() {
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Shorts</h2>
             {restaurantData.shorts && restaurantData.shorts.length > 0 ? (
-              <ul className={styles.list}> 
-                {restaurantData.shorts.map((shortUrl, index) => {
-                 
-                  return (
-                    <li key={`short-${index}`} className={styles.listItem}>
-                      <a
-                        href={shortUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.shortLink} 
-                      >
-                        Watch Short {index + 1}
-                      </a>
-                    </li>
-                  );
-                })}
+              <ul className={styles.list}>
+                {restaurantData.shorts.map((shortUrl, index) => (
+                  <li key={`short-${index}`} className={styles.listItem}>
+                    <a
+                      href={shortUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.shortLink}
+                    >
+                      Watch Short {index + 1}
+                    </a>
+                  </li>
+                ))}
               </ul>
             ) : (
               <p className={styles.noItemsMessage}>No shorts available.</p>
