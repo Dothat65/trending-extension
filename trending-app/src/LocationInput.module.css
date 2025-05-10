@@ -1,0 +1,41 @@
+.form {
+  display: flex;
+  margin-bottom: 24px;
+  gap: 8px;
+}
+
+.inputField {
+  flex-grow: 1;
+  padding: 10px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+}
+
+.inputField:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 1px #1a73e8;
+}
+
+.submitButton {
+  padding: 10px 16px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.submitButton:hover {
+  background-color: #287ae6;
+}
+
+.submitButton:disabled {
+  background-color: #f1f3f4;
+  color: #bdc1c6;
+  cursor: not-allowed;
+}

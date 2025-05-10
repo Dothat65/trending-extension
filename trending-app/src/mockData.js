@@ -11,9 +11,9 @@ export const mockRestaurantData = {
     ],
 
     shorts: [
-        "https://www.youtube.com/watch?v=videoId1",
-        "https://www.youtube.com/watch?v=videoId2",
-        "https://www.youtube.com/watch?v=$"
+        "https://www.youtube.com/watch?v=ky6cV2YdLaI",
+        "https://www.youtube.com/watch?v=ky6cV2YdLaI",
+        "https://www.youtube.com/watch?v=ky6cV2YdLaI"
       ]
     }
 
