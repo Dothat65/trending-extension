@@ -7,6 +7,8 @@ import os
 from dotenv import load_dotenv
 from google import genai
 from urllib.parse import quote
+import sqlite3
+
 
 app = Flask(__name__)
 CORS(app)
@@ -17,24 +19,59 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-# @app.route("/", methods = ['GET'])
+# @app.route('/', methods=['GET'])
 # def main():
-#     return jsonify(GOOGLE_API_KEY)
-
+#     reviews = getYelpReviews("Sakura Japanese Restaurant", "4713 Kirkwood Hwy, Wilmington, DE 19808")
+#     return jsonify(reviews)
 
 @app.route('/getData', methods = ['GET'])
 def getData():
-    location = request.args.get('location')
+    name = request.args.get('name')
+    address = request.args.get('address')
+    location = name + "at" + address
     if not location:
         return jsonify({'error': 'Missing location parameters'}), 400
     
     dictionary = dict()
     reviews = getGoogleReviews(location)
-    dictionary["pros"] = getPoints(reviews, "positive")
-    dictionary["cons"] = getPoints(reviews, "negative")
+    reviewsFromYelp = getYelpReviews(name, address)
+    dictionary["pros"] = getPoints(reviews, reviewsFromYelp, "positive", [])
+    dictionary["cons"] = getPoints(reviews, reviewsFromYelp, "negative", dictionary["pros"])
     dictionary["shorts"] = getShorts(location)
     return jsonify(dictionary)
 
+
+def getYelpReviews(name, address):
+    partsOfAddress = address.split(",") # [Street, City, State + Postal Code]
+    state_zip = partsOfAddress[2].split(" ")
+
+    connection = sqlite3.connect("database/yelp.db")
+    cursor = connection.cursor()
+
+    cursor.execute('''
+        SELECT id FROM users
+        WHERE name = ? AND address = ? AND state = ? AND postal_code = ?
+    ''', (name, partsOfAddress[0].strip(), state_zip[1], state_zip[2]))
+
+    row = cursor.fetchone()
+    if not row:
+        return []
+
+    business_id = row[0]
+    
+    cursor.execute('''
+        SELECT review from reviews where id = ?
+    ''', (business_id,))
+
+    reviews = cursor.fetchall()
+
+    cursor.execute('''
+        SELECT tip from tips where id = ?
+    ''', (business_id,))
+
+    tips = cursor.fetchall()
+
+    return tips + reviews
 
 def getGoogleReviews(location):
     post_data = {
@@ -44,7 +81,7 @@ def getGoogleReviews(location):
     headers = {
         'Content-Type': 'application/json',
         'X-Goog-Api-Key': GOOGLE_API_KEY,
-        'X-Goog-FieldMask': 'places.reviews'
+        'X-Goog-FieldMask': 'places.reviews,places.reviewSummary'
     }
 
     try:
@@ -55,13 +92,14 @@ def getGoogleReviews(location):
         )
         
         data = response.json()
-
+        #print(data)
         if 'places' not in data:
             return 
 
         google_reviews = data['places'][0]["reviews"]
 
         reviews = [review["text"]["text"] for review in google_reviews]
+        reviews.append(data['places'][0]["reviewSummary"]["text"]["text"])
 
         return reviews
 
@@ -111,28 +149,40 @@ def getDuration(duration):
     time = isodate.parse_duration(duration)
     return int(time.total_seconds())
 
-def getPoints(reviews, reviewTone):
+def getPoints(reviews, reviews2, reviewTone, existingPoints):
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         contents=f"""
-            Given the following reviews:
-            {reviews}
+        You are given a list of customer reviews and a list of existing summarized points.
 
-            Identify the common {reviewTone} aspects mentioned in these reviews. 
-            Summarize these into at most 3 distinct points, with each point being a single line long.
-            The start of each point should be capitalized, there should be no space after the comma, and no period.
-            Finally, return these points as a comma-separated list.             
-            Do not include any introductory phrases, bullet points, or new line symbols.
-            If there are no {reviewTone} aspects identified in the reviews, return the word "".
-        """,
+        Goal:
+        - Identify up to 3 distinct {reviewTone.lower()} aspects commonly mentioned across all reviews.
+        - Do not duplicate any themes already present in the existing points.
+        - Each identified aspect must be a single-line summary starting with a capital letter, no space after commas, and no period.
+
+        Input:
+        Reviews:
+        {reviews}
+        {reviews2}
+
+        Existing Points (Do not repeat themes from these):
+        {existingPoints}
+
+        Output Format:
+        - Return a single string with the identified aspects separated by commas.
+        - Do not include bullet points, newlines, or introductory text.
+        - If no valid aspects are identified, return an empty string: "".
+        """
     )
+
 
     results = response.text
     results = results.rstrip('\n')
 
     points = []
     for point in results.split(","):
-        points.append(point + ".")
+        tmp = point.strip()
+        points.append(tmp + ".")
 
     return points
 
