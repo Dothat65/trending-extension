@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { mockRestaurantData } from './mockData';
-import LocationInput from './LocationInput.jsx';
+import LocationInput from './LocationInput';
 import styles from './App.module.css';
 
 function App() {
