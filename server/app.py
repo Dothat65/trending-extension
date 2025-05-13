@@ -28,7 +28,7 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 def getData():
     name = request.args.get('name')
     address = request.args.get('address')
-    location = name + "at" + address
+    location = name + " " + address
     if not location:
         return jsonify({'error': 'Missing location parameters'}), 400
     
@@ -37,12 +37,14 @@ def getData():
     reviewsFromYelp = getYelpReviews(name, address)
     dictionary["pros"] = getPoints(reviews, reviewsFromYelp, "positive", [])
     dictionary["cons"] = getPoints(reviews, reviewsFromYelp, "negative", dictionary["pros"])
-    dictionary["shorts"] = getShorts(location)
+    dictionary["shorts"] = getShorts(name)
     return jsonify(dictionary)
 
 
 def getYelpReviews(name, address):
+    address = address.strip()
     partsOfAddress = address.split(",") # [Street, City, State + Postal Code]
+    print(partsOfAddress)
     state_zip = partsOfAddress[2].split(" ")
 
     connection = sqlite3.connect("database/yelp.db")
@@ -128,7 +130,7 @@ def getShorts(location):
             print(f"Error: {response.status_code}, {response.text}")
             continue  # Don't return error response here, just continue
     
-    return shorts
+    return shorts[:5]
     
 
 def getVideoIDs(location):
