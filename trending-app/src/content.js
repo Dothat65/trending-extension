@@ -64,7 +64,7 @@ const handle_change = (mutationsList, observer) => {
                             const addressElement = target.querySelector('.Io6YTe.fontBodyMedium.kR99db.fdkmkc');
                             
                             if (nameElement && addressElement) {
-                                let name = nameElement.innerHTML;
+                                let name = nameElement.innerHTML || document.querySelector('h1.DUwDvf.lfPIob')?.innerText.trim();
                                 let address = addressElement.innerHTML;
                                 console.log('Found restaurant:', { name, address });
                                 indicator.style.background = 'blue';
