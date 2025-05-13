@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { mockRestaurantData } from './mockData';
+import { useChromeStorage } from './useChromeStorage';
 import LocationInput from './LocationInput';
 import styles from './App.module.css';
 
@@ -12,6 +13,8 @@ function App() {
   const [error, setError] = useState(null);
   // State to track the current location input
   const [currentLocation, setCurrentLocation] = useState("");
+
+  const [name, setName] = useChromeStorage("name", "testing");
 
   // Effect to load mock data on initial render
   useEffect(() => {
