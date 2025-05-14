@@ -1,110 +1,149 @@
 .appContainer {
-    font-family: 'Roboto', Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #3c4043;
-    background-color: #fff;
-    width: 380px;
-    min-height: 200px;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
-    box-sizing: border-box;
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #3c4043;
+  background-color: #fff;
+  width: 380px;
+  min-height: 200px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 2px 6px 2px rgba(60, 64, 67, 0.15);
+  box-sizing: border-box;
 }
 
 .panelTitle {
-    font-size: 22px;
-    font-weight: 500;
-    color: #202124;
-    margin-top: 0;
-    margin-bottom: 16px;
-    line-height: 1.3;
+  font-size: 22px;
+  font-weight: 500;
+  color: #202124;
+  margin-top: 0;
+  margin-bottom: 16px;
+  line-height: 1.3;
 }
 
 .section {
-    margin-top: 20px;
-    margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .sectionTitle {
-    font-size: 16px;
-    font-weight: 500;
-    color: #3c4043;
-    margin-top: 0;
-    margin-bottom: 12px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #e8eaed;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3c4043;
+  margin-top: 0;
+  margin-bottom: 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #e8eaed;
 }
 
 .list {
-    list-style-type: none;
-    padding-left: 0;
-    margin: 0;
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
 }
 
 .listItem {
-    padding: 8px 0;
-    font-size: 14px;
-    color: #5f6368;
-    display: flex;
-    align-items: center;
-    line-height: 1.4;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #5f6368;
+  display: flex;
+  align-items: center;
+  line-height: 1.4;
 }
 
 .listItem + .listItem {
-    margin-top: 4px;
+  margin-top: 4px;
 }
 
 .proItem::before {
-    content: '👍';
-    margin-right: 10px;
-    font-size: 16px;
+  content: "👍";
+  margin-right: 10px;
+  font-size: 16px;
 }
 
 .conItem::before {
-    content: '👎';
-    margin-right: 10px;
-    font-size: 16px;
+  content: "👎";
+  margin-right: 10px;
+  font-size: 16px;
 }
 
 .shortsGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
 }
 
 .shortLinkContainer {
-    display: block;
-    border-radius: 6px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.07);
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  display: block;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
 .shortLinkContainer:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .shortThumbnail {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    border-radius: 6px;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
 .noItemsMessage {
-    color: #5f6368;
-    font-style: italic;
-    padding: 8px 0;
+  color: #5f6368;
+  font-style: italic;
+  padding: 8px 0;
 }
 
-.loading, .error {
-    text-align: center;
-    padding: 20px;
-    color: #5f6368;
-    font-size: 16px;
+.loading,
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #5f6368;
+  font-size: 16px;
+}
+
+.videoList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.videoThumbnailLink {
+  text-decoration: none;
+  position: relative;
+  width: 160px; /* Half the default width (320px / 2) */
+  flex-shrink: 0;
+}
+
+.thumbnailWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.videoThumbnail {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.playIconOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0.3em 0.5em;
+  border-radius: 50%;
+  pointer-events: none;
 }
