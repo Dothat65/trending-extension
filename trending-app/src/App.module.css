@@ -147,3 +147,17 @@
   border-radius: 50%;
   pointer-events: none;
 }
+
+.spinner {
+  margin-top: 20px;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+  font-size: 40px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
