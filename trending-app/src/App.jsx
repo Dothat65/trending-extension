@@ -118,7 +118,7 @@ function App() {
   if (isLoading) {
     return (
       <div className={styles.appContainer}>
-        <LocationInput onSubmit={handleLocationSubmit} disabled={true} />
+        {/* <LocationInput onSubmit={handleLocationSubmit} disabled={true} /> */}
         <div className={styles.loading}>Searching for {currentLocation}...</div>
       </div>
     );
@@ -194,23 +194,30 @@ function App() {
           </div>
 
           {/* Shorts Section */}
+          {/* Shorts Section */}
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Shorts</h2>
             {restaurantData.shorts && restaurantData.shorts.length > 0 ? (
-              <ul className={styles.list}>
-                {restaurantData.shorts.map((shortUrl, index) => (
-                  <li key={`short-${index}`} className={styles.listItem}>
-                    <a
-                      href={shortUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.shortLink}
-                    >
-                      Watch Short {index + 1}
-                    </a>
-                  </li>
+              <div className={styles.videoList}>
+                {restaurantData.shorts.map((videoId, index) => (
+                  <a
+                    key={`short-${index}`}
+                    href={`https://www.youtube.com/watch?v=${videoId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.videoThumbnailLink}
+                  >
+                    <div className={styles.thumbnailWrapper}>
+                      <img
+                        src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+                        alt={`Short video ${index + 1}`}
+                        className={styles.videoThumbnail}
+                      />
+                      <div className={styles.playIconOverlay}>▶</div>
+                    </div>
+                  </a>
                 ))}
-              </ul>
+              </div>
             ) : (
               <p className={styles.noItemsMessage}>No shorts available.</p>
             )}
