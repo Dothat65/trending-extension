@@ -44,18 +44,18 @@ const handle_change = (mutationsList, observer) => {
     console.log('MutationObserver triggered - Number of mutations:', mutationsList.length);
     for (let i = 0; i < mutationsList.length; i++) {
         let mutation = mutationsList[i]
-
-        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+        console.log(mutation.type, mutation.target)
+        if ((mutation.type === 'attributes' && mutation.attributeName === 'style') || mutation.type == 'childList') {
             // Check if the element has the 'display' style property
             let node = mutation.target
             // Check if the mutated node has the class 'gYkzb'
             console.log('Found style change on element:', node.className);
-            if (node.classList.contains('gYkzb')) {
+            if (node.classList.contains('gYkzb') || node.classList.contains('aIFcqe')) {
                 const displayStyle = window.getComputedStyle(node).display;
                 console.log('Found gYkzb element, display style:', displayStyle);
 
                 // If the display is not 'none', log the change
-                if (displayStyle !== 'none') {
+                if (displayStyle !== 'none' || node.classList.contains('aIFcqe')) {
                     const target = document.querySelector('.XltNde')
                     
                     try {
