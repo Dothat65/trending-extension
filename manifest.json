@@ -4,16 +4,26 @@
     "description": "Find pros and cons and youtube shorts for restaurants",
     "version": "1.0",
     "action": {
-        "default_popup" : "popup/popup.html"
+        "default_popup": "popup.html"
     },
-    "icons": {
-    },
-    "background" : {
+    "background": {
         "service_worker": "background.js",
         "type": "module"
     },
+    "content_scripts": [
+        {
+            "js": ["trending-app/dist/content.js"],
+            "matches": ["*://*.google.com/maps/*"]
+        }
+    ],
     "permissions": [
-        "storage"
-    ]
-
+        "storage",
+        "scripting"
+    ],
+    "host_permissions": [
+        "http://localhost:5000/",
+        "*://*.google.com/maps/*"
+    ],
+    "icons": {
+    }
 }
