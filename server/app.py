@@ -124,13 +124,13 @@ def getShorts(location):
             data = response.json()
             duration = getDuration(data["items"][0]["contentDetails"]["duration"])
             if duration < 60:
-                shorts.append("https://www.youtube.com/watch?v=" + id)
+                shorts.append(id)
 
         else:
             print(f"Error: {response.status_code}, {response.text}")
             continue  # Don't return error response here, just continue
     
-    return shorts[:5]
+    return shorts[:4]
     
 
 def getVideoIDs(location):
@@ -160,7 +160,7 @@ def getPoints(reviews, reviews2, reviewTone, existingPoints):
         Goal:
         - Identify up to 3 distinct {reviewTone.lower()} aspects commonly mentioned across all reviews.
         - Do not duplicate any themes already present in the existing points.
-        - Each identified aspect must be a single-line summary starting with a capital letter, no space after commas, and no period.
+        - Each identified aspect must be a single-line summary starting with a capital letter, no space after commas, and no period, but there should still be a space between words.
 
         Input:
         Reviews:
