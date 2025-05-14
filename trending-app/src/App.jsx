@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { mockRestaurantData } from './mockData';
-import { useChromeStorage } from './useChromeStorage';
-import LocationInput from './LocationInput';
-import styles from './App.module.css';
+import React, { useState, useEffect, useRef } from "react";
+import { mockRestaurantData } from "./mockData";
+import { useChromeStorage } from "./useChromeStorage";
+import LocationInput from "./LocationInput";
+import styles from "./App.module.css";
 
 function App() {
   // State to hold restaurant data
@@ -12,19 +12,66 @@ function App() {
   // State to track errors
   const [error, setError] = useState(null);
   // State to track the current location input
-  const [currentLocation, setCurrentLocation] = useState("");
+  const [currentLocation, setCurrentLocation] =
+    useChromeStorage("address", "testing") || useState("");
+  const isFirstRun = useRef(true);
 
-  const [name, setName] = useChromeStorage("name", "testing");
+  const [name, setName] = useChromeStorage("name", "testing") || useState("");
 
   // Effect to load mock data on initial render
   useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setRestaurantData(mockRestaurantData);
-      setCurrentLocation(mockRestaurantData.restaurantName || "Featured Restaurant");
-      setIsLoading(false);
-    }, 500); // Simulate a delay for loading
-  }, []);
+    if (isFirstRun.current) {
+      isFirstRun.current = false; // Skip the first run
+      return;
+    }
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const data = await getData(name, currentLocation);
+        if (data) {
+          setRestaurantData(data);
+        } else {
+          setError("No data found for the specified location.");
+        }
+      } catch (error) {
+        console.error("Error fetching restaurant data:", error);
+        setError("Failed to fetch restaurant data.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (name || currentLocation) {
+      fetchData();
+    }
+  }, [name, currentLocation]);
+
+  //Function for getting Server Data
+  async function getData(name, address) {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:5000/getData?name=${encodeURIComponent(
+          name
+        )}&address=${encodeURIComponent(address)}`
+      );
+
+      if (!response.ok) {
+        // Log raw response text for better debugging
+        const errorText = await response.text();
+        console.error("Server responded with error HTML:", errorText);
+        throw new Error(`Server returned ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return null;
+    }
+  }
 
   // Function to handle location input submission
   const handleLocationSubmit = (locationQuery) => {
@@ -54,13 +101,13 @@ function App() {
           restaurantName: locationQuery,
           pros: [],
           cons: [],
-          shorts: []
+          shorts: [],
         });
       } else {
         // Simulate successful data fetch
         setRestaurantData({
           ...mockRestaurantData,
-          restaurantName: locationQuery
+          restaurantName: locationQuery,
         });
       }
       setIsLoading(false);
@@ -92,7 +139,9 @@ function App() {
     return (
       <div className={styles.appContainer}>
         <LocationInput onSubmit={handleLocationSubmit} disabled={false} />
-        <div className={styles.noItemsMessage}>Enter a location to see insights.</div>
+        <div className={styles.noItemsMessage}>
+          Enter a location to see insights.
+        </div>
       </div>
     );
   }
@@ -100,12 +149,10 @@ function App() {
   // Render restaurant data
   return (
     <div className={styles.appContainer}>
-      <LocationInput onSubmit={handleLocationSubmit} disabled={isLoading} />
-
       {restaurantData && (
         <>
           <h1 className={styles.panelTitle}>
-            {restaurantData.restaurantName || "Restaurant Details"}
+            {name ? `${name} Details` : "Restaurant Details"}
           </h1>
 
           {/* Pros Section */}

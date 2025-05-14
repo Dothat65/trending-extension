@@ -24,15 +24,22 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 
 @app.route('/getData', methods = ['GET'])
 def getData():
-    location = request.args.get('location')
+    name = request.args.get('name')
+    address = request.args.get('address')
+    location = name + " " + address    
+    print(location)
     if not location:
         return jsonify({'error': 'Missing location parameters'}), 400
+    
+    if name == "testing" or address == "testing":
+        return
     
     dictionary = dict()
     reviews = getGoogleReviews(location)
     dictionary["pros"] = getPoints(reviews, "positive")
     dictionary["cons"] = getPoints(reviews, "negative")
     dictionary["shorts"] = getShorts(location)
+    print("Complete")
     return jsonify(dictionary)
 
 

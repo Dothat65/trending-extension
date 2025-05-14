@@ -59,7 +59,7 @@ const handle_change = (mutationsList, observer) => {
                     const target = document.querySelector('.XltNde')
                     
                     try {
-                        if (target && target.querySelector('.DkEaL') && target.querySelector('.DkEaL').innerHTML.includes('restaurant')) {
+                        if (target && target.querySelector('.DkEaL') && target.querySelector('.DkEaL').innerHTML.toLowerCase().includes('restaurant')) {
                             const nameElement = target.querySelector('.a5H0ec');
                             const addressElement = target.querySelector('.Io6YTe.fontBodyMedium.kR99db.fdkmkc');
                             
