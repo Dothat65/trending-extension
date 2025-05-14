@@ -3,6 +3,7 @@ import { mockRestaurantData } from "./mockData";
 import { useChromeStorage } from "./useChromeStorage";
 import LocationInput from "./LocationInput";
 import styles from "./App.module.css";
+import { FaSpinner } from "react-icons/fa";
 
 function App() {
   // State to hold restaurant data
@@ -119,7 +120,13 @@ function App() {
     return (
       <div className={styles.appContainer}>
         {/* <LocationInput onSubmit={handleLocationSubmit} disabled={true} /> */}
-        <div className={styles.loading}>Searching for {currentLocation}...</div>
+        <div className={styles.loading}>
+          Searching for {currentLocation}...
+          <div>
+            {" "}
+            <FaSpinner className={styles.spinner} />
+          </div>
+        </div>
       </div>
     );
   }
